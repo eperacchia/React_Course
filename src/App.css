@@ -2,16 +2,16 @@
   text-align: center;
 }
 
-.red{
+.Red{
   color: red;
 }
 
-.bold{
+.Bold{
   font-weight: bold;
 }
 
 
-.button{
+.Button{
   background-color:  green;
   color: white;
   font: inherit;
@@ -21,7 +21,15 @@
 
 }
 
-.button:hover {
+.Button:hover {
   background-color: lightgreen;
   color: black;
 } 
+
+.Button.Red{
+  background-color: red;
+}
+
+.Button.Red:hover{
+  background-color: salmon;
+}
