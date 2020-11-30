@@ -1,8 +1,24 @@
 import React, { Component } from 'react';
 import classes from './App.css';
-import Person from './Person/Person';
+import Persons from '../components/Persons/Persons'; 
+import Cockpit from '../components/Cockpit/Cockpit';
 
 class App extends Component {
+
+  constructor(props){
+    super(props);
+    console.log('[App.js] constuctor');
+    
+    //lo state può essere settato dentro il costruttore, ma è un a modalità vecchia, quindi si fa fuori
+    /*this.state = {
+      persons : [
+        {id: 'asd', name: "Edu", age: "28"}, 
+        {id: 'dsa', name: "Cami", age: "26"},
+        {id: 'fsa', name: "Franky", age: "28"}
+      ],
+      showPersons: false
+    }*/
+  }
 
   state = {
     persons : [
@@ -13,7 +29,24 @@ class App extends Component {
     showPersons: false
   }
 
-  
+  static getDerivedStateFromProps(props, state) {
+    console.log('[App.js] getDerivedStateFromProps', props)
+    return state;
+  }
+
+  componentDidMount(){
+    console.log('[App.js] componentDidMount');
+  }
+
+  shouldComponentUpdate(nextProps, nextState){
+    console.log('[App.js] shouldComponentUpdate');
+    return true; //true se react deve fare l'update, false altrimenti
+    //Ovvero, se è a false, il toggle del button non fa nulla, a true invece mostra le Persons
+  }
+
+  componentDidUpdate(){
+    console.log('[App.js] componentDidUpdate');
+  }
 
   nameChangeHandler = (event, id) => {
     const personIndex = this.state.persons.findIndex(p => {
@@ -54,47 +87,27 @@ class App extends Component {
   }
 
   render() {
-
-    let btnClass = [classes.Button];
-
+    console.log('[App.js] render');
+    
     let persons = null;
 
     if(this.state.showPersons){
-      persons = (
-        <div>
-          {
-            this.state.persons.map((p,i)=>{
-              return <Person 
-                click={() =>this.deletePersonHandler(i)}
-                name={p.name} 
-                age={p.age}
-                key={p.id}
-                changed={(event) => this.nameChangeHandler(event, p.id)}/>
-            })
-          }
-        </div>
-      );
-
-      btnClass.push(classes.Red);
-
-    }
-
-    let aggignedClasses = [];
-    if(this.state.persons.length <= 2){
-      aggignedClasses.push(classes.Red);
-    }
-    if(this.state.persons.length <=1){
-      aggignedClasses.push(classes.Bold);
+      persons = 
+        <Persons 
+          persons={this.state.persons}
+          clicked={this.deletePersonHandler}
+          changed={this.nameChangeHandler}>
+        </Persons>;
     }
 
     return (
         <div className={classes.App}>
-          <h1>Hi, I'm a React App</h1>
-          <p className={aggignedClasses.join(' ')}>This is really working!</p>
-          <button
-            className={btnClass.join(' ')}
-            // alt={this.state.showPersons}
-            onClick={this.togglePersonsHandler}> Toggle Persons </button>
+          <Cockpit
+            title={this.props.appTitle}
+            showPersons={this.state.showPersons}
+            persons={this.state.persons}
+            clicked={this.togglePersonsHandler}>
+          </Cockpit>
           {persons}
         </div> 
     );
