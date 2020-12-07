@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import Person from './Person/Person';
 
-class Persons extends Component {
+class Persons extends PureComponent {
 
     //questo metodo è inutile se non si ha un state iniziale nella classe
     // static getDerivedStateFromProps(props, state){
@@ -9,10 +9,23 @@ class Persons extends Component {
     //     return state;
     // }
 
-    shouldComponentUpdate(nextProps, nextState){
-        console.log('[Persons.js] shouldComponentUpdate');
-        return true; 
-    }
+
+    //questo va bene solo se facciamo il check di poche props, se ne checkiamo di più usiamo PureComponent ( esteso da React ) invece di Component
+    //e chiaramente togliamo sholdComponentUpdate, questo perchè PureComponent è un Component che implementa shouldComponentUpdate con un
+    //check delle props completo
+    // shouldComponentUpdate(nextProps, nextState){
+    //     console.log('[Persons.js] shouldComponentUpdate');
+    //     if(
+    //         nextProps.persons !== this.props.persons || 
+    //         nextProps.changed !== this.props.changed ||
+    //         nextProps.clicked !== this.props.clicked
+    //     ){
+    //         return true; 
+    //     }
+    //     else{
+    //         return false;
+    //     }
+    // }
 
     getSnapshotBeforeUpdate(previousProps, previousState){
         console.log('[Persons.js] getSnapshotBeforeUpdate');
@@ -24,6 +37,10 @@ class Persons extends Component {
         //ad esempio prendere dati da un server
         console.log('[Persons.js] componentDidUpdate');
         console.log(snapshot);
+    }
+
+    componentWillUnmount(){
+        console.log('[Persons.js] componentWillUnmount');
     }
 
     render(){
